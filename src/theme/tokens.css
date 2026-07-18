@@ -1,0 +1,66 @@
+/* ===================================================================
+   Design tokens — Vietnamese zodiac app.
+   Direction: night-sky lacquer. Deeper, cooler near-black than the
+   personal site's sơn mài palette, with vermilion (son đỏ) joining
+   gold + celadon so this project reads as its own object.
+   =================================================================== */
+:root {
+  /* surfaces */
+  --bg: #0A0A0F;            /* indigo-black night sky */
+  --bg-raised: #12121A;     /* cards, palace cells */
+  --bg-inset: #07070B;      /* chart wells, input fields */
+
+  /* ink */
+  --ink: #EFE9DA;
+  --ink-bright: #F7F1E1;
+  --ink-soft: #CFC8B4;
+  --muted: #9A937F;
+  --muted-deep: #6E6858;
+
+  /* accents */
+  --gold: #E0B45C;          /* primary accent: stars, headings */
+  --gold-soft: #D9C287;
+  --vermilion: #C8452C;     /* son đỏ: seals, clash states, emphasis */
+  --vermilion-soft: #D96A50;
+  --celadon: #93BCA0;       /* harmony states, secondary accent */
+  --celadon-deep: #5C7A68;
+
+  /* five elements (ngũ hành) — used for element badges + chart */
+  --el-kim: #C9CDD4;        /* Kim / metal */
+  --el-moc: #7FA86B;        /* Mộc / wood */
+  --el-thuy: #6C9BC4;       /* Thủy / water */
+  --el-hoa: #D96A50;        /* Hỏa / fire */
+  --el-tho: #C4A05E;        /* Thổ / earth */
+
+  /* rules / borders */
+  --rule: rgba(224, 180, 92, 0.22);
+  --rule-soft: rgba(224, 180, 92, 0.13);
+  --rule-strong: rgba(224, 180, 92, 0.32);
+
+  /* type */
+  --font-display: 'Fraunces Variable', Georgia, serif;
+  --font-body: 'Be Vietnam Pro', system-ui, sans-serif;
+
+  /* layout */
+  --maxw: 1100px;
+  --maxw-read: 720px;
+  --pad-x: clamp(20px, 5vw, 48px);
+  --radius: 10px;
+  --radius-lg: 18px;
+}
+
+html, body { margin: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+a { color: inherit; text-decoration: none; }
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 500; }
