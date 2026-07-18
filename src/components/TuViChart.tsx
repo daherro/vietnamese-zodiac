@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { STAR_MEANINGS } from '../content/tuviStars'
 import type { Palace, TuViChart as Chart } from '../lib/tuvi/buildChart'
 import { HOA_NAMES } from '../lib/tuvi/stars'
@@ -132,12 +132,41 @@ function sectorPath(cx: number, cy: number, r1: number, r2: number, a1: number, 
   ].join(' ')
 }
 
+/**
+ * Rendered width the font sizes below were designed for. The SVG's viewBox
+ * is fixed at 600 units, so on a narrower phone the whole chart — text
+ * included — scales down with it; a 15-unit label that's ~9px at this
+ * baseline width shrinks to ~5px on a 375px phone. `fontScale` compensates
+ * so labels stay readable regardless of how much the layout squeezes the
+ * chart, instead of just inheriting the container's width.
+ */
+const WHEEL_BASELINE_PX = 480
+
 function Wheel({ chart, onSelect }: { chart: Chart; onSelect: (p: Palace) => void }) {
   const C = 300
   const R1 = 120
   const R2 = 292
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const [fontScale, setFontScale] = useState(1)
+
+  useEffect(() => {
+    const el = wrapRef.current
+    if (!el) return
+    const measure = () => {
+      const w = el.getBoundingClientRect().width
+      if (w > 0) setFontScale(Math.min(1.15, Math.max(1, WHEEL_BASELINE_PX / w)))
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
+  const f = (px: number) => px * fontScale
+  const lineGap = 14 * fontScale
+
   return (
-    <div className="laso-wheel">
+    <div className="laso-wheel" ref={wrapRef}>
       <svg viewBox="0 0 600 600" role="img" aria-label="Tử Vi wheel chart">
         {chart.palaces.map((p) => {
           // Sector centered on the branch position: Tý at the bottom,
@@ -160,26 +189,26 @@ function Wheel({ chart, onSelect }: { chart: Chart; onSelect: (p: Palace) => voi
                 fill={isMenh ? 'rgba(224, 180, 92, 0.10)' : 'var(--bg-raised)'}
                 stroke={isMenh ? 'var(--gold)' : isThan ? 'var(--celadon-deep)' : 'var(--rule-soft)'}
               />
-              <text x={lx} y={ly - 6} textAnchor="middle" fontSize="15" fill="var(--gold-soft)" fontWeight="600">
+              <text x={lx} y={ly - 6} textAnchor="middle" fontSize={f(15)} fill="var(--gold-soft)" fontWeight="600">
                 {p.def.name}
               </text>
-              <text x={lx} y={ly + 10} textAnchor="middle" fontSize="11" fill="var(--muted)">
+              <text x={lx} y={ly + 10} textAnchor="middle" fontSize={f(11)} fill="var(--muted)">
                 {p.stemName} {p.branchName}
               </text>
               {mains.slice(0, 2).map((s, si) => (
                 <text
                   key={s.key}
                   x={C + starR * Math.cos(mid)}
-                  y={C + starR * Math.sin(mid) + si * 14 - (mains.length > 1 ? 7 : 0)}
+                  y={C + starR * Math.sin(mid) + si * lineGap - (mains.length > 1 ? lineGap / 2 : 0)}
                   textAnchor="middle"
-                  fontSize="11"
+                  fontSize={f(11)}
                   fill={s.hoa ? 'var(--vermilion-soft)' : 'var(--ink-bright)'}
                 >
                   {s.name}
                 </text>
               ))}
               {mains.length > 2 && (
-                <text x={C + starR * Math.cos(mid)} y={C + starR * Math.sin(mid) + 21} textAnchor="middle" fontSize="10" fill="var(--muted)">
+                <text x={C + starR * Math.cos(mid)} y={C + starR * Math.sin(mid) + lineGap * 1.5} textAnchor="middle" fontSize={f(10)} fill="var(--muted)">
                   +{mains.length - 2}
                 </text>
               )}
@@ -187,10 +216,10 @@ function Wheel({ chart, onSelect }: { chart: Chart; onSelect: (p: Palace) => voi
           )
         })}
         <circle cx={C} cy={C} r={R1 - 4} fill="var(--bg-inset)" stroke="var(--rule)" />
-        <text x={C} y={C - 8} textAnchor="middle" fontSize="19" fill="var(--ink-bright)" fontFamily="var(--font-display)">
+        <text x={C} y={C - 8} textAnchor="middle" fontSize={f(19)} fill="var(--ink-bright)" fontFamily="var(--font-display)">
           {chart.cuc.name}
         </text>
-        <text x={C} y={C + 14} textAnchor="middle" fontSize="11" fill="var(--muted)">
+        <text x={C} y={C + 14} textAnchor="middle" fontSize={f(11)} fill="var(--muted)">
           tap a palace for detail
         </text>
       </svg>

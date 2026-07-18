@@ -37,8 +37,12 @@ export function Reveal({ chart, onDone }: { chart: BirthChart; onDone: () => voi
   ]
 
   useEffect(() => {
-    if (step >= lines.length) {
-      const t = setTimeout(onDone, 900)
+    // step 0: initial pause before the first line. Steps 1..lines.length:
+    // each line shows for the same 1500ms. One extra step past the last
+    // line lets it fade out (matching the others) before onDone fires,
+    // instead of cutting straight to the result page mid-line.
+    if (step > lines.length) {
+      const t = setTimeout(onDone, 500)
       return () => clearTimeout(t)
     }
     const t = setTimeout(() => setStep((s) => s + 1), step === 0 ? 400 : 1500)

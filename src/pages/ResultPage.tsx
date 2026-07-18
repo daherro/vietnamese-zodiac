@@ -65,7 +65,7 @@ export function ResultPage() {
           See how your sign sits with someone else's: Tam Hợp allies, Tứ Hành
           Xung frictions, and the element story between your bản mệnh.
         </p>
-        <Link className="btn" to={compareLink}>
+        <Link className="btn" to={compareLink} style={{ marginTop: 10, display: 'inline-block' }}>
           Compare with someone
         </Link>
       </section>
