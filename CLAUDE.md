@@ -2,7 +2,7 @@
 
 React 19 + Vite + TS. Plain CSS tokens (`src/theme/tokens.css`), `motion` for
 animation, react-router. All calculation is client-side; no backend. Deploys as
-a static Vite build (Vercel intended, not yet wired).
+a static Vite build on Vercel.
 
 ## Domain rules — do not "simplify" these
 
@@ -28,10 +28,14 @@ a static Vite build (Vercel intended, not yet wired).
   medallion / reveal sequence may animate; the lá số grid/wheel must not.
 - The lá số grid layout is the traditional one: Tỵ–Ngọ–Mùi–Thân across the
   top row, Dần–Sửu–Tý–Hợi across the bottom (see GRID_POS in TuViChart.tsx).
-- Animal artwork: drop 12 PNGs into `src/assets/animals/` named
-  `ty suu dan mao thin ti ngo mui than dau tuat hoi` (.png) and the hero
-  medallion picks them up automatically; until then it renders the Chi name
-  typographically. (Image generation was quota-blocked at build time.)
+- Animal artwork lives in `src/assets/animals/` as 12 PNGs named
+  `ty suu dan mao thin ti ngo mui than dau tuat hoi` (.png), picked up
+  automatically by the hero medallion via a Vite glob import. Source images
+  from the generator come letterboxed (1408×768 with the square artwork
+  centered); center-crop to 768×768 with `sips -c 768 768 <file>` before
+  dropping in a replacement, or the padding shows as bars. `.medallion` in
+  `app.css` clips to a circle (`overflow: hidden` + `object-fit: cover`) so
+  the artwork's own gold rim should sit flush against the container edge.
 
 ## Content status
 
@@ -41,6 +45,14 @@ his review pass for voice and cultural accuracy. Don't rewrite it wholesale
 without asking; do keep his edits verbatim once he makes them. House style
 for this copy: no em dashes, concrete over abstract, tradition treated
 seriously but never fatalistically ("friction is information, not fate").
+
+## Deploy
+
+Live at https://vietnamese-zodiac.vercel.app (Vercel project `justin-nguyen/
+vietnamese-zodiac`), connected to GitHub `daherro/vietnamese-zodiac` — push to
+`main` auto-deploys. `vercel.json` has a catch-all rewrite to `index.html`;
+without it, direct links to `/result` or `/compare` (the shareable URLs) 404
+on Vercel since this is a client-side-routed SPA.
 
 ## Verify
 
