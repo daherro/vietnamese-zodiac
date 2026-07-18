@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { BirthInputForm } from '../components/BirthInputForm'
+import { ShareLink } from '../components/ShareLink'
 import { Term } from '../components/Term'
 import { ZodiacDiagram } from '../components/ZodiacDiagram'
 import { CHI_RELATION_COPY, ELEMENT_RELATION_COPY, TIER_COPY } from '../content/relationships'
@@ -47,15 +48,7 @@ export function ComparePage() {
           Enter their birth date yourself, or send them this link and they
           fill in their own for a joint reveal.
         </p>
-        <div className="share-line">
-          <input readOnly value={shareUrl} onFocus={(e) => e.target.select()} aria-label="share link" />
-          <button
-            className="btn btn-ghost"
-            onClick={() => navigator.clipboard?.writeText(shareUrl)}
-          >
-            Copy link
-          </button>
-        </div>
+        <ShareLink url={shareUrl} title={`${chartA.pillars.year.name} — Vietnamese zodiac compatibility`} />
         <hr className="rule" />
         <BirthInputForm
           compact

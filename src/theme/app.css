@@ -40,7 +40,6 @@
   color: var(--ink-soft);
 }
 
-.birth-form input[type='date'],
 .birth-form input[type='time'],
 .birth-form select {
   font: inherit;
@@ -59,6 +58,34 @@
 }
 
 .birth-form .row > * { flex: 1; min-width: 160px; }
+
+/* .birth-form is a CSS grid; grid items default to min-width:auto, so
+   without this the row below refuses to shrink past its content's
+   intrinsic width and blows out the page (the same bug class as the
+   compare-heads overflow). */
+.dob-field { min-width: 0; }
+
+.dob-label {
+  display: block;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+
+.dob-row {
+  display: flex;
+  gap: 10px;
+}
+
+.dob-row select {
+  flex: 1;
+  min-width: 0;
+}
+/* Day and month need less room than a 4-digit year — give year more of
+   the row instead of splitting three ways evenly. */
+.dob-row select[aria-label='Day'] { flex: 0.8; }
+.dob-row select[aria-label='Month'] { flex: 1.3; }
+.dob-row select[aria-label='Year'] { flex: 1.1; }
 
 .toggle-line {
   display: flex;
@@ -361,6 +388,15 @@
   align-items: center;
   flex-wrap: wrap;
   margin-top: 16px;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  flex: 0 0 auto;
+  line-height: 0;
 }
 
 .share-line input {
